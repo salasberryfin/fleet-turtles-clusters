@@ -3,7 +3,7 @@ kind: DockerCluster
 metadata:
   annotations:
     helm.sh/resource-policy: keep
-  name: cluster1
+  name: test-cluster
   namespace: default
 spec:
   failureDomains:
@@ -28,8 +28,8 @@ apiVersion: cluster.x-k8s.io/v1beta1
 kind: Cluster
 metadata:
   labels:
-    cni: cluster1-crs-0
-  name: cluster1
+    cni: test-cluster-crs-0
+  name: test-cluster
   namespace: default
 spec:
   clusterNetwork:
@@ -43,16 +43,16 @@ spec:
   controlPlaneRef:
     apiVersion: controlplane.cluster.x-k8s.io/v1beta1
     kind: KubeadmControlPlane
-    name: cluster1-control-plane
+    name: test-cluster-control-plane
   infrastructureRef:
     apiVersion: infrastructure.cluster.x-k8s.io/v1beta1
     kind: DockerCluster
-    name: cluster1
+    name: test-cluster
 ---
 apiVersion: infrastructure.cluster.x-k8s.io/v1beta1
 kind: DockerMachineTemplate
 metadata:
-  name: cluster1-control-plane
+  name: test-cluster-control-plane
   namespace: default
 spec:
   template:
@@ -66,7 +66,7 @@ kind: KubeadmControlPlane
 metadata:
   annotations:
     helm.sh/resource-policy: keep
-  name: cluster1-control-plane
+  name: test-cluster-control-plane
   namespace: default
 spec:
   kubeadmConfigSpec:
@@ -94,14 +94,14 @@ spec:
     infrastructureRef:
       apiVersion: infrastructure.cluster.x-k8s.io/v1beta1
       kind: DockerMachineTemplate
-      name: cluster1-control-plane
+      name: test-cluster-control-plane
   replicas: 1
   version: v1.26.4
 ---
 apiVersion: infrastructure.cluster.x-k8s.io/v1beta1
 kind: DockerMachineTemplate
 metadata:
-  name: cluster1-md-0
+  name: test-cluster-md-0
   namespace: default
 spec:
   template:
@@ -113,7 +113,7 @@ spec:
 apiVersion: bootstrap.cluster.x-k8s.io/v1beta1
 kind: KubeadmConfigTemplate
 metadata:
-  name: cluster1-md-0
+  name: test-cluster-md-0
   namespace: default
 spec:
   template:
@@ -129,10 +129,10 @@ kind: MachineDeployment
 metadata:
   annotations:
     helm.sh/resource-policy: keep
-  name: cluster1-md-0
+  name: test-cluster-md-0
   namespace: default
 spec:
-  clusterName: cluster1
+  clusterName: test-cluster
   replicas: 1
   selector:
     matchLabels: null
@@ -142,27 +142,27 @@ spec:
         configRef:
           apiVersion: bootstrap.cluster.x-k8s.io/v1beta1
           kind: KubeadmConfigTemplate
-          name: cluster1-md-0
-      clusterName: cluster1
+          name: test-cluster-md-0
+      clusterName: test-cluster
       failureDomain: fd4
       infrastructureRef:
         apiVersion: infrastructure.cluster.x-k8s.io/v1beta1
         kind: DockerMachineTemplate
-        name: cluster1-md-0
+        name: test-cluster-md-0
       version: v1.26.4
 ---
 apiVersion: addons.cluster.x-k8s.io/v1beta1
 kind: ClusterResourceSet
 metadata:
-  name: cluster1-crs-0
+  name: test-cluster-crs-0
   namespace: default
 spec:
   clusterSelector:
     matchLabels:
-      cni: cluster1-crs-0
+      cni: test-cluster-crs-0
   resources:
   - kind: ConfigMap
-    name: cni-cluster1-crs-0
+    name: cni-test-cluster-crs-0
   strategy: ApplyOnce
 ---
 apiVersion: v1
@@ -286,5 +286,5 @@ data:
                 path: /lib/modules
 kind: ConfigMap
 metadata:
-  name: cni-cluster1-crs-0
+  name: cni-test-cluster-crs-0
   namespace: default
