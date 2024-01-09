@@ -1,0 +1,7 @@
+apiVersion: management.cattle.io/v3
+kind: Cluster
+metadata:
+  generateName: c-test-v3Cluster
+spec:
+  displayName: "workload-v3Cluster"
+  description: "some v3 cluster created by capi"
